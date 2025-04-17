@@ -1,6 +1,14 @@
-import {Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinTable, ManyToOne,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn
+} from "typeorm";
 import {IsString, IsUrl, Length} from "class-validator";
 import {Wish} from "../../wishes/entities/wish.entity";
+import {User} from "../../users/entities/user.entity";
 
 @Entity()
 export class Wishlist {
@@ -28,6 +36,9 @@ export class Wishlist {
     @IsUrl()
     image: string;
 
-    @OneToMany(() => Wish, wish => wish.id)
+    @ManyToOne(() => User, (user) => user.wishlists)
+    owner: User;
+
+    @JoinTable()
     items: Wish[];
 }

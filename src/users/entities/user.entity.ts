@@ -2,8 +2,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
-    JoinColumn,
-    OneToMany, OneToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from "typeorm";
@@ -15,8 +14,6 @@ import {Offer} from "../../offers/entities/offer.entity";
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
-    @OneToOne(() => Offer)
-    @JoinColumn()
     id: number;
 
     @CreateDateColumn()
@@ -58,9 +55,9 @@ export class User {
     @OneToMany(() => Wish, wish => wish.owner)
     wishes: Wish[];
 
-    @OneToMany(() => Wish, wish => wish.offers)
-    offers: Wish[];
+    @OneToMany(() => Offer, offer => offer.user)
+    offers: Offer[];
 
-    @OneToMany(() => Wishlist, wishlist => wishlist.id)
-    wishlist: Wishlist[];
+    @OneToMany(() => Wishlist, wishlist => wishlist.owner)
+    wishlists: Wishlist[];
 }
