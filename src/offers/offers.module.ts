@@ -7,6 +7,7 @@ import { Offer } from "./entities/offer.entity";
 @Module({
   imports: [TypeOrmModule.forFeature([Offer])],
   controllers: [OffersController],
-  providers: [OffersService]
+  providers: [OffersService],
+  exports: [OffersService]
 })
 export class OffersModule {}
