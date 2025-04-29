@@ -10,31 +10,26 @@ export class UsersService {
   constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
 
   create(createUserDto: CreateUserDto) {
-    // const user = await this.usersRepository.create(createUserDto);
-    // return this.usersRepository.save(user);
-
     return this.userRepository.save(createUserDto);
   }
 
-  async findByUsername(username: string) {
-    const user = await this.userRepository.findOne({ username });
-
-    return user;
+  findMany(updateUserDto: UpdateUserDto) {
+    return this.userRepository.find({ where: updateUserDto });
   }
 
-  findFew(updateUserDto) {
-    return this.userRepository.findBy(updateUserDto);
-  }
-
-  findOne(id: number) {
-    return this.userRepository.findOneBy({ id });
+  findOne(updateUserDto: UpdateUserDto) {
+    return this.userRepository.findOne({ where: updateUserDto  });
   }
 
   updateOne(id: number, updateUserDto: UpdateUserDto) {
     return this.userRepository.update({ id }, updateUserDto);
   }
 
-  removeOne(id: number) {
-    return this.userRepository.delete({ id });
+  findByUsernameOrEmail(query: string) {
+    return this.userRepository.find({ where: [{ username: query}, { email: query} ] });
   }
+
+  // removeOne(id: number) {
+  //   return this.userRepository.delete({ id });
+  // }
 }
