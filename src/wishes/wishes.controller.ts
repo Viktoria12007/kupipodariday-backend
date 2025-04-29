@@ -12,9 +12,14 @@ export class WishesController {
     return this.wishesService.create(createWishDto);
   }
 
-  @Get()
-  findAll() {
-    return this.wishesService.findAll();
+  @Get('last')
+  findLast() {
+    return this.wishesService.findLast();
+  }
+
+  @Get('top')
+  findTop() {
+    return this.wishesService.findTop();
   }
 
   @Get(':id')
@@ -24,11 +29,16 @@ export class WishesController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateWishDto: UpdateWishDto) {
-    return this.wishesService.update(+id, updateWishDto);
+    return this.wishesService.updateOne(+id, updateWishDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.wishesService.remove(+id);
+    return this.wishesService.removeOne(+id);
+  }
+
+  @Post(':id/copy')
+  copy(@Param('id') id: string) {
+    return this.wishesService.copy(+id);
   }
 }
