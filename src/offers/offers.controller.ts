@@ -12,12 +12,12 @@ export class OffersController {
   }
 
   @Get()
-  findMany() {
+  findAll() {
     return this.offersService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.offersService.findOne(+id);
+    return this.offersService.findOne({ where: { id: +id }});
   }
 }

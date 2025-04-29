@@ -24,17 +24,17 @@ export class WishesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.wishesService.findOne(+id);
+    return this.wishesService.findOne({ where: { id: +id }});
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateWishDto: UpdateWishDto) {
-    return this.wishesService.updateOne(+id, updateWishDto);
+    return this.wishesService.updateOne( { id: +id }, updateWishDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.wishesService.removeOne(+id);
+    return this.wishesService.removeOne({ id: +id });
   }
 
   @Post(':id/copy')

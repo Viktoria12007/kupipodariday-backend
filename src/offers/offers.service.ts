@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateOfferDto } from './dto/create-offer.dto';
-import { UpdateOfferDto } from './dto/update-offer.dto';
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { FindOneOptions, Repository } from "typeorm";
 import { Offer } from "./entities/offer.entity";
 
 @Injectable()
@@ -17,8 +16,8 @@ export class OffersService {
   //   return this.offerRepository.findBy(updateOfferDto);
   // }
 
-  findOne(id: number) {
-    return this.offerRepository.findOne({ where: { id } });
+  findOne(query: FindOneOptions<Offer>) {
+    return this.offerRepository.findOne(query);
   }
 
   findAll() {

@@ -10,35 +10,35 @@ export class UsersController {
   @UseGuards(JwtGuard)
   @Get('me')
   profile(@Req() req) {
-    return this.usersService.findOne(req.user.id);
+    return this.usersService.findOne({ where: { id: req.user.id }});
   }
 
   @UseGuards(JwtGuard)
   @Patch('me')
   updateProfile(@Req() req, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.updateOne(req.user.id, updateUserDto);
+    return this.usersService.updateOne({ id: req.user.id }, updateUserDto);
   }
 
   @UseGuards(JwtGuard)
   @Get('me/wishes')
   async meWishes(@Req() req) {
-    const me = await this.usersService.findOne(req.user.id);
+    const me = await this.usersService.findOne({ where: { id: req.user.id }});
     return me.wishes;
   }
 
   @Get(':username')
   findByUsername(@Param('username') username: string ) {
-    return this.usersService.findOne({ username });
+    return this.usersService.findOne({ where: { username } });
   }
 
   @Get(':username/wishes')
   async findWishesByUsername(@Param('username') username: string ) {
-    const user = await this.usersService.findOne({ username });
+    const user = await this.usersService.findOne({ where: { username } });
     return user.wishes;
   }
 
   @Post('find')
   findByUsernameOrEmail(@Body() body: { query: string }) {
-    return this.usersService.findByUsernameOrEmail(body.query);
+    return this.usersService.findMany({ where: [{ username: body.query}, { email: body.query} ] });
   }
 }

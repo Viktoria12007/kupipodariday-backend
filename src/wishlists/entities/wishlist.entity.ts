@@ -1,11 +1,4 @@
-import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    JoinTable, ManyToOne,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn
-} from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import {IsString, IsUrl, Length} from "class-validator";
 import {Wish} from "../../wishes/entities/wish.entity";
 import {User} from "../../users/entities/user.entity";

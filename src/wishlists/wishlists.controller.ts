@@ -19,16 +19,16 @@ export class WishlistsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.wishlistsService.findOne(+id);
+    return this.wishlistsService.findOne({ where: { id: +id }});
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateWishlistDto: UpdateWishlistDto) {
-    return this.wishlistsService.updateOne(+id, updateWishlistDto);
+    return this.wishlistsService.updateOne({ id: +id }, updateWishlistDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.wishlistsService.removeOne(+id);
+    return this.wishlistsService.removeOne({ id: +id });
   }
 }

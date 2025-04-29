@@ -3,7 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {InjectRepository} from "@nestjs/typeorm";
 import { User } from "./entities/user.entity";
-import { Repository } from "typeorm";
+import { FindManyOptions, FindOneOptions, FindOptionsWhere, Repository } from "typeorm";
 
 @Injectable()
 export class UsersService {
@@ -13,23 +13,24 @@ export class UsersService {
     return this.userRepository.save(createUserDto);
   }
 
-  findMany(updateUserDto: UpdateUserDto) {
-    return this.userRepository.find({ where: updateUserDto });
+  findMany(query: FindManyOptions<User>) {
+    return this.userRepository.find(query);
   }
 
-  findOne(updateUserDto: UpdateUserDto) {
-    return this.userRepository.findOne({ where: updateUserDto  });
+  findOne(query: FindOneOptions<User>) {
+    return this.userRepository.findOneOrFail(query);
   }
 
-  updateOne(id: number, updateUserDto: UpdateUserDto) {
-    return this.userRepository.update({ id }, updateUserDto);
+  updateOne(query: FindOptionsWhere<User>, updateUserDto: UpdateUserDto) {
+    return this.userRepository.update(query, updateUserDto);
   }
 
-  findByUsernameOrEmail(query: string) {
-    return this.userRepository.find({ where: [{ username: query}, { email: query} ] });
-  }
+  // findByUsernameOrEmail(query: FindOneOptions<User>) {
+  //   return this.userRepository.find(query);
+    // return this.userRepository.find({ where: [{ username: query}, { email: query} ] });
+  // }
 
-  // removeOne(id: number) {
-  //   return this.userRepository.delete({ id });
+  // removeOne(query: FindOptionsWhere<User>) {
+  //   return this.userRepository.delete(query);
   // }
 }

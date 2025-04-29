@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 import {InjectRepository} from "@nestjs/typeorm";
-import {Repository} from "typeorm";
+import { FindManyOptions, FindOneOptions, FindOptionsWhere, Repository } from "typeorm";
 import {Wishlist} from "./entities/wishlist.entity";
 
 @Injectable()
@@ -13,19 +13,19 @@ export class WishlistsService {
     return this.wishlistRepository.save(createWishlistDto);
   }
 
-  findFew(updateWishlistDto) {
-    return this.wishlistRepository.findBy(updateWishlistDto);
+  findMany(query: FindManyOptions<Wishlist>) {
+    return this.wishlistRepository.find(query);
   }
 
-  findOne(id: number) {
-    return this.wishlistRepository.findOneBy({ id });
+  findOne(query: FindOneOptions<Wishlist>) {
+    return this.wishlistRepository.findOne(query);
   }
 
-  updateOne(id: number, updateWishlistDto: UpdateWishlistDto) {
-    return this.wishlistRepository.update({ id }, updateWishlistDto);
+  updateOne(query: FindOptionsWhere<Wishlist>, updateWishlistDto: UpdateWishlistDto) {
+    return this.wishlistRepository.update(query, updateWishlistDto);
   }
 
-  removeOne(id: number) {
-    return this.wishlistRepository.delete({ id });
+  removeOne(query: FindOptionsWhere<Wishlist>) {
+    return this.wishlistRepository.delete(query);
   }
 }
