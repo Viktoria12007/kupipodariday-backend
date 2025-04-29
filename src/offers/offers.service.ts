@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateOfferDto } from './dto/create-offer.dto';
 import { UpdateOfferDto } from './dto/update-offer.dto';
-import {InjectRepository} from "@nestjs/typeorm";
-import {Repository} from "typeorm";
-import {Offer} from "./entities/offer.entity";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Offer } from "./entities/offer.entity";
 
 @Injectable()
 export class OffersService {
@@ -13,19 +13,23 @@ export class OffersService {
     return this.offerRepository.save(createOfferDto);
   }
 
-  findFew(updateOfferDto) {
-    return this.offerRepository.findBy(updateOfferDto);
-  }
+  // findMany(updateOfferDto: UpdateOfferDto) {
+  //   return this.offerRepository.findBy(updateOfferDto);
+  // }
 
   findOne(id: number) {
-    return this.offerRepository.findOneBy({ id });
+    return this.offerRepository.findOne({ where: { id } });
   }
 
-  updateOne(id: number, updateOfferDto: UpdateOfferDto) {
-    return this.offerRepository.update({ id }, updateOfferDto);
+  findAll() {
+    return this.offerRepository.find();
   }
 
-  removeOne(id: number) {
-    return this.offerRepository.delete({ id });
-  }
+  // updateOne(id: number, updateOfferDto: UpdateOfferDto) {
+  //   return this.offerRepository.update({ id }, updateOfferDto);
+  // }
+  //
+  // removeOne(id: number) {
+  //   return this.offerRepository.delete({ id });
+  // }
 }
