@@ -15,7 +15,7 @@ import { OffersModule } from './offers/offers.module';
       username: 'student',
       password: 'student',
       database: 'nest_project',
-      entities: ['src/**/entities/*.entity.ts'],
+      entities: [__dirname + '/**/*.entity.ts'],
       synchronize: true,
     }),
     UsersModule,
