@@ -17,7 +17,7 @@ export class WishesService {
     return this.wishRepository.save(createWishDto);
   }
 
-  findMany(query: FindManyOptions<Wish>) {
+  findMany(query?: FindManyOptions<Wish>) {
     return this.wishRepository.find(query);
   }
 
@@ -25,14 +25,14 @@ export class WishesService {
     return this.wishRepository.findOne(query);
   }
 
-  async findLast() {
+  findLast() {
     return this.findMany({
       order: { createdAt: "DESC"},
       take: 40,
     })
   }
 
-  async findTop() {
+  findTop() {
     return this.findMany({
       order: { copied: "DESC" },
       take: 20,

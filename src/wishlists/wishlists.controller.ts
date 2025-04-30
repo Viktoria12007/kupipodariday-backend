@@ -12,10 +12,10 @@ export class WishlistsController {
     return this.wishlistsService.create(createWishlistDto);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.wishlistsService.findAll();
-  // }
+  @Get()
+  findAll() {
+    return this.wishlistsService.findMany();
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

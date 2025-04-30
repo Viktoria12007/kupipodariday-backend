@@ -13,7 +13,7 @@ export class OffersController {
 
   @Get()
   findAll() {
-    return this.offersService.findAll();
+    return this.offersService.findMany();
   }
 
   @Get(':id')

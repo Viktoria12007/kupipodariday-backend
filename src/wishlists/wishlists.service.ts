@@ -13,7 +13,7 @@ export class WishlistsService {
     return this.wishlistRepository.save(createWishlistDto);
   }
 
-  findMany(query: FindManyOptions<Wishlist>) {
+  findMany(query?: FindManyOptions<Wishlist>) {
     return this.wishlistRepository.find(query);
   }
 

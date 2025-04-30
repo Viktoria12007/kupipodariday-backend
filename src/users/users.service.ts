@@ -13,7 +13,7 @@ export class UsersService {
     return this.userRepository.save(createUserDto);
   }
 
-  findMany(query: FindManyOptions<User>) {
+  findMany(query?: FindManyOptions<User>) {
     return this.userRepository.find(query);
   }
 
