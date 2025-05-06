@@ -3,14 +3,18 @@ import { UsersService } from "../users/users.service";
 import { AuthService } from "./auth.service";
 import { LocalGuard } from "../guards/local.guard";
 import { CreateUserDto } from "../users/dto/create-user.dto";
+import { SigninUserDto } from "./dto/signin-user.dto";
+import { ApiTags } from "@nestjs/swagger";
 
-@Controller('auth')
+@ApiTags('authenticate')
+@Controller()
 export class AuthController {
-    constructor(private usersService: UsersService, private authService: AuthService) {}
+    constructor(private authService: AuthService, private usersService: UsersService) {}
 
     @UseGuards(LocalGuard)
     @Post('signin')
-    signin(@Req() req) {
+    // signin(@Req() req, @Body() signinUserDto: SigninUserDto): Promise<SigninUserResponseDto> {
+    signin(@Req() req, @Body() signinUserDto: SigninUserDto) {
         return this.authService.auth(req.user);
     }
 
