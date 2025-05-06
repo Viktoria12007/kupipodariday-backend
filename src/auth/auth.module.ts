@@ -9,10 +9,10 @@ import { LocalStrategy } from "./local.strategy";
 
 @Module({
     imports: [
+        ConfigModule,
         UsersModule,
         PassportModule,
         JwtModule.registerAsync(({
-            imports: [ConfigModule],
             useFactory: async (configService: ConfigService) => ({
                 secret: configService.get<string>('jwt_secret'),
             }),
