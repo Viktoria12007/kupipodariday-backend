@@ -8,8 +8,9 @@ import { Offer } from "./entities/offer.entity";
 export class OffersService {
   constructor(@InjectRepository(Offer) private offerRepository: Repository<Offer>) {}
 
-  create(createOfferDto: CreateOfferDto) {
-    return this.offerRepository.save(createOfferDto);
+  async create(createOfferDto: CreateOfferDto) {
+    const offer = await this.offerRepository.create(createOfferDto);
+    return this.offerRepository.save(offer);
   }
 
   findMany(query?: FindManyOptions<Offer>) {
@@ -17,7 +18,7 @@ export class OffersService {
   }
 
   findOne(query: FindOneOptions<Offer>) {
-    return this.offerRepository.findOne(query);
+    return this.offerRepository.findOneOrFail(query);
   }
 
   // updateOne(id: number, updateOfferDto: UpdateOfferDto) {
