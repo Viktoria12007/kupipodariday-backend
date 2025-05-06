@@ -1,16 +1,28 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable } from "@nestjs/common";
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {InjectRepository} from "@nestjs/typeorm";
 import { User } from "./entities/user.entity";
-import { FindManyOptions, FindOneOptions, FindOptionsWhere, Repository } from "typeorm";
+import { FindManyOptions, FindOneOptions, QueryFailedError, Repository } from "typeorm";
 
 @Injectable()
 export class UsersService {
   constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
 
-  create(createUserDto: CreateUserDto) {
-    return this.userRepository.save(createUserDto);
+  async create(createUserDto: CreateUserDto) {
+    try {
+      const { password } = createUserDto;
+      const user = await this.userRepository.create({
+        ...createUserDto,
+        // password: await hashValue(password)
+      });
+      return this.userRepository.save(user);
+    } catch (err) {
+      if (err instanceof QueryFailedError && err.driverError?.code === '23505') {
+        throw new ConflictException('Пользователь с таким e-mail уже существует');
+      }
+      throw new BadRequestException('Переданы некорректные данные при создании пользователя');
+    }
   }
 
   findMany(query?: FindManyOptions<User>) {
@@ -21,8 +33,20 @@ export class UsersService {
     return this.userRepository.findOneOrFail(query);
   }
 
-  updateOne(query: FindOptionsWhere<User>, updateUserDto: UpdateUserDto) {
-    return this.userRepository.update(query, updateUserDto);
+  async updateOne(query: FindOneOptions<User>, updateUserDto: UpdateUserDto) {
+    try {
+      const { password } = updateUserDto;
+      const user = this.findOne(query);
+      if (password) {
+        // updateUserDto.password = await hashValue(password);
+      }
+      return this.userRepository.save({ ...user, ...updateUserDto });
+    } catch (err) {
+      if (err instanceof QueryFailedError && err.driverError?.code === '23505') {
+        throw new ConflictException('Новый e-mail уже занят');
+      }
+      throw new BadRequestException('Переданы некорректные данные при обновлении пользователя');
+    }
   }
 
   // findByUsernameOrEmail(query: FindOneOptions<User>) {
