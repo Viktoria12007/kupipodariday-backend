@@ -5,6 +5,7 @@ import { UsersModule } from './users/users.module';
 import { WishesModule } from './wishes/wishes.module';
 import { WishlistsModule } from './wishlists/wishlists.module';
 import { OffersModule } from './offers/offers.module';
+import { AuthModule } from "./auth/auth.module";
 
 @Module({
   imports: [
@@ -15,9 +16,11 @@ import { OffersModule } from './offers/offers.module';
       username: 'student',
       password: 'student',
       database: 'nest_project',
+      autoLoadEntities: true,
       entities: [__dirname + '/**/*.entity.ts'],
       synchronize: true,
     }),
+    AuthModule,
     UsersModule,
     WishesModule,
     WishlistsModule,
