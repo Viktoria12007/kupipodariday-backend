@@ -8,7 +8,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   // app.useGlobalFilters(new EntityNotFoundExceptionFilter());
   // app.useGlobalInterceptors(new TypeOrmErrorMapperInterceptor());
-  // app.enableCors();
+  app.enableCors();
 
   const config = new DocumentBuilder()
     .setTitle('КупиПодариДай')
