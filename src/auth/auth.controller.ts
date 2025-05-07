@@ -4,7 +4,7 @@ import { AuthService } from "./auth.service";
 import { LocalGuard } from "../guards/local.guard";
 import { CreateUserDto } from "../users/dto/create-user.dto";
 import { SigninUserDto } from "./dto/signin-user.dto";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
 
 @ApiTags('authenticate')
 @Controller()
@@ -18,6 +18,7 @@ export class AuthController {
         return this.authService.auth(req.user);
     }
 
+    @ApiOperation({ summary: 'Создание пользователя' })
     @Post('signup')
     async signup(@Body() createUserDto: CreateUserDto) {
         const user = await this.usersService.create(createUserDto);
