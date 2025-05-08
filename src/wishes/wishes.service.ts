@@ -57,12 +57,12 @@ export class WishesService {
     }
   }
 
-  async copy(id: number) {
-    // const owner = await this.usersService.findOne({ where: { id: userId }});
-    // const sourceWish = await this.findOne({ where: { id }});
-    // const { copied, id: _, ...wishData } = sourceWish;
-    // sourceWish.copied = copied + 1;
-    // await this.wishRepository.save(sourceWish);
-    // return this.create(wishData, owner.id);
+  async copy(wishId: number, userId: number) {
+    const owner = await this.usersService.findOne({ where: { id: userId }});
+    const sourceWish = await this.findOne({ where: { id: wishId }});
+    const { copied, id: _, ...wishData } = sourceWish;
+    sourceWish.copied = copied + 1;
+    await this.wishRepository.save(sourceWish);
+    return this.create(owner.id, wishData);
   }
 }
