@@ -17,7 +17,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         const user = this.usersService.findOne({ where: { id: jwtPayload.sub }});
 
         if (!user) {
-            throw new UnauthorizedException();
+            throw new UnauthorizedException('Такого пользователя не существует.');
         }
 
         return user;
