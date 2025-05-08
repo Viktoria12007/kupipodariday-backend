@@ -3,6 +3,7 @@ import { WishesService } from './wishes.service';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
 import { ApiTags } from "@nestjs/swagger";
+import { AuthUser } from "../common/decorators/user.decorator";
 
 @ApiTags('wishes')
 @Controller('wishes')
@@ -10,8 +11,8 @@ export class WishesController {
   constructor(private readonly wishesService: WishesService) {}
 
   @Post()
-  create(@Body() createWishDto: CreateWishDto) {
-    return this.wishesService.create(createWishDto);
+  create(@AuthUser() user, @Body() createWishDto: CreateWishDto) {
+    return this.wishesService.create(user.id, createWishDto);
   }
 
   @Get('last')
@@ -39,8 +40,8 @@ export class WishesController {
     return this.wishesService.removeOne({ id: +id });
   }
 
-  @Post(':id/copy')
-  copy(@Param('id') id: string) {
-    return this.wishesService.copy(+id);
-  }
+  // @Post(':id/copy')
+  // copy(@Param('id') id: string) {
+  //   return this.wishesService.copy(+id);
+  // }
 }
