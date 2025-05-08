@@ -1,10 +1,11 @@
 import {Body, Controller, Post, Req, UseGuards} from "@nestjs/common";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "./auth.service";
-import { LocalGuard } from "../guards/local.guard";
+import { LocalGuard } from "./guards/local.guard";
 import { CreateUserDto } from "../users/dto/create-user.dto";
 import { SigninUserDto } from "./dto/signin-user.dto";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
+import { AuthUser } from "../common/decorators/user.decorator";
 
 @ApiTags('authenticate')
 @Controller()
@@ -13,9 +14,8 @@ export class AuthController {
 
     @UseGuards(LocalGuard)
     @Post('signin')
-    // signin(@Req() req, @Body() signinUserDto: SigninUserDto): Promise<SigninUserResponseDto> {
-    signin(@Req() req, @Body() signinUserDto: SigninUserDto) {
-        return this.authService.auth(req.user);
+    signin(@AuthUser() user, @Body() signinUserDto: SigninUserDto) {
+        return this.authService.auth(user);
     }
 
     @ApiOperation({ summary: 'Создание пользователя' })
