@@ -1,9 +1,10 @@
 import { BadRequestException, ConflictException, Injectable } from "@nestjs/common";
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import {InjectRepository} from "@nestjs/typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./entities/user.entity";
 import { FindManyOptions, FindOneOptions, QueryFailedError, Repository } from "typeorm";
+import { hashValue } from "../helpers/hash";
 
 @Injectable()
 export class UsersService {
@@ -14,7 +15,7 @@ export class UsersService {
       const { password } = createUserDto;
       const user = await this.userRepository.create({
         ...createUserDto,
-        // password: await hashValue(password)
+        password: await hashValue(password),
       });
       return this.userRepository.save(user);
     } catch (err) {
@@ -38,7 +39,7 @@ export class UsersService {
       const { password } = updateUserDto;
       const user = this.findOne(query);
       if (password) {
-        // updateUserDto.password = await hashValue(password);
+        updateUserDto.password = await hashValue(password);
       }
       return this.userRepository.save({ ...user, ...updateUserDto });
     } catch (err) {
