@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 import {InjectRepository} from "@nestjs/typeorm";
@@ -27,10 +27,18 @@ export class WishlistsService {
   }
 
   updateOne(query: FindOptionsWhere<Wishlist>, updateWishlistDto: UpdateWishlistDto) {
-    return this.wishlistRepository.update(query, updateWishlistDto);
+    try {
+      return this.wishlistRepository.update(query, updateWishlistDto);
+    } catch (err) {
+      new NotFoundException('Такого списка подарков не существует');
+    }
   }
 
   removeOne(query: FindOptionsWhere<Wishlist>) {
-    return this.wishlistRepository.delete(query);
+    try {
+      return this.wishlistRepository.delete(query);
+    } catch (err) {
+      new NotFoundException('Такого списка подарков не существует');
+    }
   }
 }
