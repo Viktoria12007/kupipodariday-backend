@@ -23,7 +23,7 @@ export class WishlistsService {
   }
 
   findOne(query: FindOneOptions<Wishlist>) {
-    return this.wishlistRepository.findOne(query);
+    return this.wishlistRepository.findOneOrFail(query);
   }
 
   updateOne(query: FindOptionsWhere<Wishlist>, updateWishlistDto: UpdateWishlistDto) {
