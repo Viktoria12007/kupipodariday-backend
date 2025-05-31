@@ -56,7 +56,7 @@ export class WishesService {
     }
   }
 
-  async copy(wishId: number, userId: number) {
+  async copy(userId: number, wishId: number) {
     const owner = await this.usersService.findOne({ where: { id: userId }});
     const sourceWish = await this.findOne({ where: { id: wishId }});
     const { copied, id: _, ...wishData } = sourceWish;
