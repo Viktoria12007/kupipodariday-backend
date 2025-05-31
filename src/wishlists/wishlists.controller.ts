@@ -1,10 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from "@nestjs/common";
 import { WishlistsService } from './wishlists.service';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 import { ApiTags } from "@nestjs/swagger";
+import { AuthUser } from "../common/decorators/user.decorator";
+import { User } from "../users/entities/user.entity";
+import { JwtGuard } from "../auth/guards/jwt.guard";
 
 @ApiTags('wishlists')
+@UseGuards(JwtGuard)
 @Controller('wishlists')
 export class WishlistsController {
   constructor(private readonly wishlistsService: WishlistsService) {}
