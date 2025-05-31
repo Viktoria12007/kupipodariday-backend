@@ -46,8 +46,9 @@ export class WishesController {
     return this.wishesService.removeOne({ id: +id });
   }
 
-  // @Post(':id/copy')
-  // copy(@Param('id') id: string) {
-  //   return this.wishesService.copy(+id);
-  // }
+  @UseGuards(JwtGuard)
+  @Post(':id/copy')
+  copy(@AuthUser() user: User, @Param('id') id: string) {
+    return this.wishesService.copy(user.id, +id);
+  }
 }

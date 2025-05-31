@@ -14,8 +14,8 @@ export class WishlistsController {
   constructor(private readonly wishlistsService: WishlistsService) {}
 
   @Post()
-  create(@Body() createWishlistDto: CreateWishlistDto) {
-    return this.wishlistsService.create(createWishlistDto);
+  create(@AuthUser() user: User, @Body() createWishlistDto: CreateWishlistDto) {
+    return this.wishlistsService.create(user.id, createWishlistDto);
   }
 
   @Get()

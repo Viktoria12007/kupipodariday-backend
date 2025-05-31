@@ -13,8 +13,8 @@ export class OffersController {
   constructor(private readonly offersService: OffersService) {}
 
   @Post()
-  create(@Body() createOfferDto: CreateOfferDto) {
-    return this.offersService.create(createOfferDto);
+  create(@AuthUser() user: User, @Body() createOfferDto: CreateOfferDto) {
+    return this.offersService.create(user.id, createOfferDto);
   }
 
   @Get()
