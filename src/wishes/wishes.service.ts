@@ -23,7 +23,11 @@ export class WishesService {
   }
 
   findOne(query: FindOneOptions<Wish>) {
-    return this.wishRepository.findOneOrFail(query);
+    const wish = this.wishRepository.findOne(query);
+    if (!wish) {
+      throw new NotFoundException('Такого подарка не существует!');
+    }
+    return wish;
   }
 
   findLast() {

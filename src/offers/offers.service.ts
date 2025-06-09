@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { CreateOfferDto } from './dto/create-offer.dto';
 import { InjectRepository } from "@nestjs/typeorm";
 import { FindManyOptions, FindOneOptions, Repository } from "typeorm";
@@ -35,9 +35,12 @@ export class OffersService {
   }
 
   findOne(query: FindOneOptions<Offer>) {
-    return this.offerRepository.findOneOrFail(query);
+    const offer = this.offerRepository.findOne(query);
+    if (!offer) {
+      throw new NotFoundException('Такого предложения скинуться не существует!');
+    }
+    return offer;
   }
-
   // updateOne(id: number, updateOfferDto: UpdateOfferDto) {
   //   return this.offerRepository.update({ id }, updateOfferDto);
   // }

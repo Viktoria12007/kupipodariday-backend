@@ -23,7 +23,11 @@ export class WishlistsService {
   }
 
   findOne(query: FindOneOptions<Wishlist>) {
-    return this.wishlistRepository.findOneOrFail(query);
+    const wishlist = this.wishlistRepository.findOne(query);
+    if (!wishlist) {
+      throw new NotFoundException('Такого списка подарков не существует!');
+    }
+    return wishlist;
   }
 
   updateOne(query: FindOptionsWhere<Wishlist>, updateWishlistDto: UpdateWishlistDto) {
