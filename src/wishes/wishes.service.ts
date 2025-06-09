@@ -16,7 +16,7 @@ export class WishesService {
 
   async create(userId: number, createWishDto: CreateWishDto) {
     const owner = await this.usersService.findOne({ where: { id: userId }});
-    return this.wishRepository.save({ ...createWishDto, owner });
+    return this.wishRepository.save({ ...createWishDto, owner, raised: 0, copied: 0 });
   }
 
   findMany(query?: FindManyOptions<Wish>) {
