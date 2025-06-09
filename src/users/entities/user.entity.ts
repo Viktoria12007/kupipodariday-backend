@@ -7,19 +7,19 @@ import { ApiProperty } from "@nestjs/swagger";
 
 @Entity()
 export class User {
-    @ApiProperty({ description: 'id пользователя'})
+    @ApiProperty({ description: 'id пользователя' })
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ApiProperty({ description: 'дата создания пользователя'})
+    @ApiProperty({ description: 'дата создания пользователя' })
     @CreateDateColumn()
     createdAt: Date;
 
-    @ApiProperty({ description: 'дата обновления пользователя'})
+    @ApiProperty({ description: 'дата обновления пользователя' })
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @ApiProperty({ description: 'Имя пользователя', example: 'Test user 1' })
+    @ApiProperty({ description: 'Имя пользователя', example: 'Пользователь 1' })
     @IsString()
     @Length(2, 30)
     @Column({
@@ -27,7 +27,7 @@ export class User {
     })
     username: string;
 
-    @ApiProperty({ description: 'Описание пользователя', example: 'About test user 1' })
+    @ApiProperty({ description: 'Описание пользователя', example: 'О пользователе 1' })
     @IsString()
     @Length(2, 200)
     @IsOptional()
