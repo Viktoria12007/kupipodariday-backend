@@ -1,11 +1,10 @@
-import { Body, Controller, Get, HttpCode, Param, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Param, Patch, Post, UseGuards } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { JwtGuard } from "../auth/guards/jwt.guard";
 import {
   ApiBearerAuth,
-  ApiExtraModels,
-  ApiParam,
+  ApiExtraModels, ApiOperation,
   ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -16,17 +15,18 @@ import { NoValidUserResponse } from "./dto/no-valid-user-response";
 import { FindUserDto } from "./dto/find-user.dto";
 import { AuthUser } from "../common/decorators/user.decorator";
 
-@ApiBearerAuth()
 @ApiTags('users')
+@ApiBearerAuth()
 @ApiExtraModels(User)
 @UseGuards(JwtGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @ApiOperation({ summary: 'Получить профиль' })
   @ApiResponse({
     description: 'Возвращает пользователя по токену',
-    status: 200,
+    status: HttpStatus.OK,
     type: OmitType(User, ['password', 'email'])
   })
   @ApiUnauthorizedResponse({ description: 'Unauthorized', type: NoValidUserResponse })
@@ -48,36 +48,40 @@ export class UsersController {
     });
   }
 
+  @ApiOperation({ summary: 'Редактировать профиль' })
   @Patch('me')
   async updateProfile(@AuthUser() user: User, @Body() updateUserDto: UpdateUserDto) {
     const { password, ...updatedUser } = await this.usersService.updateOne({ where: { id: user.id }}, updateUserDto);
     return updatedUser;
   }
 
+  @ApiOperation({ summary: 'Получить подарки пользователя' })
   @Get('me/wishes')
   async meWishes(@AuthUser() user: User) {
     const me = await this.usersService.findOne({ where: { id: user.id }});
     return me.wishes;
   }
 
-  @ApiParam({
-    name: 'username',
-    description: 'Username of the user',
-    example: 'Test user 1'
-  })
+  @ApiOperation({ summary: 'Получить пользователя по username' })
   @Get(':username')
   findByUsername(@Param('username') username: string ) {
     return this.usersService.findOne({ where: { username } });
   }
 
+  @ApiOperation({ summary: 'Получить все подарки пользователя по username' })
   @Get(':username/wishes')
   async findWishesByUsername(@Param('username') username: string ) {
     const user = await this.usersService.findOne({ where: { username } });
     return user.wishes;
   }
 
+  @ApiOperation({ summary: 'Получить пользователей по username или email' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Возвращает пользователей по email или username',
+    type: [User],
+  })
   @Post('find')
-  @HttpCode(200)
   findByUsernameOrEmail(@Body() findUserDto: FindUserDto) {
     const { email, username } = findUserDto;
     return this.usersService.findMany({ where: [{ username }, { email }] });

@@ -12,6 +12,7 @@ import { AuthUser } from "../common/decorators/user.decorator";
 export class AuthController {
     constructor(private authService: AuthService, private usersService: UsersService) {}
 
+    @ApiOperation({ summary: 'Вход пользователя' })
     @UseGuards(LocalGuard)
     @Post('signin')
     signin(@AuthUser() user, @Body() signinUserDto: SigninUserDto) {
