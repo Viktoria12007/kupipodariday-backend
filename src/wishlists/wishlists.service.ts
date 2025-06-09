@@ -30,7 +30,7 @@ export class WishlistsService {
     try {
       return this.wishlistRepository.update(query, updateWishlistDto);
     } catch (err) {
-      new NotFoundException('Такого списка подарков не существует');
+      throw new NotFoundException('Такого списка подарков не существует');
     }
   }
 
@@ -38,7 +38,7 @@ export class WishlistsService {
     try {
       return this.wishlistRepository.delete(query);
     } catch (err) {
-      new NotFoundException('Такого списка подарков не существует');
+      throw new NotFoundException('Такого списка подарков не существует');
     }
   }
 }
