@@ -15,7 +15,7 @@ export class DatabaseConfigFactory implements TypeOrmOptionsFactory {
       password: this.configService.get<string>('database.password'),
       database: this.configService.get<string>('database.name'),
       autoLoadEntities: true,
-      entities: [join(__dirname, '../**/*.entity{.ts,.js}')],
+      // entities: [join(__dirname, '../**/*.entity{.ts,.js}')], // не нужно, если установлен 'autoLoadEntities: true'
       synchronize: true,
     }
   }
