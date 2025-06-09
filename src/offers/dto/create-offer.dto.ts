@@ -1,5 +1,8 @@
-export class CreateOfferDto {
-  amount: number;
-  hidden?: boolean;
+import { PickType } from "@nestjs/swagger";
+import { Offer } from "../entities/offer.entity";
+import { IsNumber } from "class-validator";
+
+export class CreateOfferDto extends PickType(Offer, ['amount', 'hidden']) {
+  @IsNumber()
   itemId: number;
 }
