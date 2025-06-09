@@ -25,7 +25,7 @@ export class OffersService {
     }
     item.raised += amount;
 
-    await this.wishesService.updateOne({ id: itemId }, { raised });
+    await this.wishesService.set({ id: itemId }, { raised });
 
     return this.offerRepository.save({ ...createOfferDto, user, item });
   }

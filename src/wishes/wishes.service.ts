@@ -5,6 +5,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { FindManyOptions, FindOneOptions, FindOptionsWhere, Repository } from "typeorm";
 import { Wish } from "./entities/wish.entity";
 import { UsersService } from "../users/users.service";
+import { ChangedRaisedDto } from "./dto/change-raised-dto";
 
 @Injectable()
 export class WishesService {
@@ -67,5 +68,13 @@ export class WishesService {
     sourceWish.copied = copied + 1;
     await this.wishRepository.save(sourceWish);
     return this.create(owner.id, wishData);
+  }
+
+  set(query: FindOptionsWhere<Wish>, raised: ChangedRaisedDto) {
+    try {
+      return this.wishRepository.update(query, raised);
+    } catch (err) {
+      throw new NotFoundException('Такого подарка не существует');
+    }
   }
 }
