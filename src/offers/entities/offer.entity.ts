@@ -32,4 +32,14 @@ export class Offer {
         default: false,
     })
     hidden: boolean;
+
+    @ManyToOne(() => User, user => user.offers, {
+        onDelete: 'CASCADE',
+    })
+    user: User;
+
+    @ManyToOne(() => Wish, wish => wish.offers, {
+        onDelete: 'CASCADE',
+    })
+    item: Wish;
 }

@@ -1,7 +1,7 @@
 import {
     Column,
     CreateDateColumn,
-    Entity,
+    Entity, ManyToMany,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
@@ -72,4 +72,17 @@ export class Wish {
     })
     @IsInt()
     copied: number;
+
+    @ManyToOne(() => User, user => user.wishes, {
+        onDelete: 'CASCADE',
+    })
+    owner: User;
+
+    @OneToMany(() => Offer, offer => offer.item, {
+        cascade: true,
+    })
+    offers: Offer[];
+
+    @ManyToMany(() => Wishlist, wishlist => wishlist.items)
+    wishlists: Wishlist[];
 }
