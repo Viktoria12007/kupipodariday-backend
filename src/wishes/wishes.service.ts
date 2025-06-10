@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
 import { InjectRepository } from "@nestjs/typeorm";
@@ -45,20 +45,26 @@ export class WishesService {
     })
   }
 
-  updateOne(query: FindOptionsWhere<Wish>, updateWishDto: UpdateWishDto) {
-    try {
-      return this.wishRepository.update(query, updateWishDto);
-    } catch (err) {
-      throw new NotFoundException('Такого подарка не существует');
+  async updateOne(userId: number, query: FindOptionsWhere<Wish>, updateWishDto: UpdateWishDto) {
+    const wish = await this.findOne({ where: { id: query.id } });
+    const owner = await this.usersService.findOne({ where: { id: userId }});
+
+    if (wish.owner.id !== owner.id) {
+      throw new ForbiddenException('Нельзя изменять чужие подарки');
     }
+
+    return this.wishRepository.update(query, updateWishDto);
   }
 
-  removeOne(query: FindOptionsWhere<Wish>) {
-    try {
-      return this.wishRepository.delete(query);
-    } catch (err) {
-      throw new NotFoundException('Такого подарка не существует');
+  async removeOne(userId: number, query: FindOptionsWhere<Wish>) {
+    const wish = await this.findOne({ where: { id: query.id } });
+    const owner = await this.usersService.findOne({ where: { id: userId }});
+
+    if (wish.owner.id !== owner.id) {
+      throw new ForbiddenException('Нельзя удалять чужие подарки');
     }
+
+    return this.wishRepository.delete(query);
   }
 
   async copy(userId: number, wishId: number) {
