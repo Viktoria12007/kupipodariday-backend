@@ -7,7 +7,7 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from "typeorm";
-import { IsInt, IsNumber, IsString, IsUrl, Length } from "class-validator";
+import { IsInt, IsNumber, IsOptional, IsString, IsUrl, Length } from "class-validator";
 import { User } from "../../users/entities/user.entity";
 import { Offer } from "../../offers/entities/offer.entity";
 import { ApiProperty } from "@nestjs/swagger";
@@ -72,6 +72,13 @@ export class Wish {
     })
     @IsInt()
     copied: number;
+
+    @ApiProperty({ description: 'копией какого подарка является текущий подарок', example: null })
+    @Column({
+        default: null,
+    })
+    @IsOptional()
+    copiedWishId: number | null;
 
     @ManyToOne(() => User, user => user.wishes, {
         onDelete: 'CASCADE',
