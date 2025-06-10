@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 import {InjectRepository} from "@nestjs/typeorm";
@@ -30,19 +30,27 @@ export class WishlistsService {
     return wishlist;
   }
 
-  updateOne(query: FindOptionsWhere<Wishlist>, updateWishlistDto: UpdateWishlistDto) {
-    try {
-      return this.wishlistRepository.update(query, updateWishlistDto);
-    } catch (err) {
-      throw new NotFoundException('Такого списка подарков не существует');
+  async updateOne(userId: number, query: FindOptionsWhere<Wishlist>, updateWishlistDto: UpdateWishlistDto) {
+    const owner = await this.usersService.findOne({ where: { id: userId }});
+    const sourceWishlist = await this.findOne({ where: { id: query.id } });
+
+    const myWishlist = owner.wishlists.find(wishlist => wishlist.id === sourceWishlist.id);
+    if (!myWishlist) {
+      throw new ConflictException('Нельзя изменять чужие списки подарков');
     }
+
+    return this.wishlistRepository.update(query, updateWishlistDto);
   }
 
-  removeOne(query: FindOptionsWhere<Wishlist>) {
-    try {
-      return this.wishlistRepository.delete(query);
-    } catch (err) {
-      throw new NotFoundException('Такого списка подарков не существует');
+  async removeOne(userId: number, query: FindOptionsWhere<Wishlist>) {
+    const owner = await this.usersService.findOne({ where: { id: userId }});
+    const sourceWishlist = await this.findOne({ where: { id: query.id } });
+
+    const myWishlist = owner.wishlists.find(wishlist => wishlist.id === sourceWishlist.id);
+    if (!myWishlist) {
+      throw new ConflictException('Нельзя удалять чужие списки подарков');
     }
+
+    return this.wishlistRepository.delete(query);
   }
 }

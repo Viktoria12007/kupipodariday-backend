@@ -36,13 +36,13 @@ export class WishlistsController {
 
   @ApiOperation({ summary: 'Редактировать список подарков по id' })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateWishlistDto: UpdateWishlistDto) {
-    return this.wishlistsService.updateOne({ id: +id }, updateWishlistDto);
+  update(@AuthUser() user: User, @Param('id') id: string, @Body() updateWishlistDto: UpdateWishlistDto) {
+    return this.wishlistsService.updateOne(user.id, { id: +id }, updateWishlistDto);
   }
 
   @ApiOperation({ summary: 'Удалить список подарков по id' })
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.wishlistsService.removeOne({ id: +id });
+  remove(@AuthUser() user: User, @Param('id') id: string) {
+    return this.wishlistsService.removeOne(user.id, { id: +id });
   }
 }
