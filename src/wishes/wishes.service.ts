@@ -64,10 +64,16 @@ export class WishesService {
   async copy(userId: number, wishId: number) {
     const owner = await this.usersService.findOne({ where: { id: userId }});
     const sourceWish = await this.findOne({ where: { id: wishId }});
-    const { copied, id: _, ...wishData } = sourceWish;
+
+    const alreadyCopiedWish = owner.wishes.find(wish => wish.copiedWishId === sourceWish.id);
+    if (alreadyCopiedWish) {
+      throw new ConflictException('Вы уже копировали себе этот подарок');
+    }
+
+    const { copied, id, ...wishData } = sourceWish;
     sourceWish.copied = copied + 1;
     await this.wishRepository.save(sourceWish);
-    return this.create(owner.id, wishData);
+    return this.create(owner.id, { ...wishData, copiedWishId: id });
   }
 
   set(query: FindOptionsWhere<Wish>, raised: ChangedRaisedDto) {
