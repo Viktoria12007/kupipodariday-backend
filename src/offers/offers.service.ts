@@ -41,11 +41,4 @@ export class OffersService {
     }
     return offer;
   }
-  // updateOne(id: number, updateOfferDto: UpdateOfferDto) {
-  //   return this.offerRepository.update({ id }, updateOfferDto);
-  // }
-  //
-  // removeOne(id: number) {
-  //   return this.offerRepository.delete({ id });
-  // }
 }

@@ -53,13 +53,4 @@ export class UsersService {
       throw new BadRequestException('Переданы некорректные данные при обновлении пользователя');
     }
   }
-
-  // findByUsernameOrEmail(query: FindOneOptions<User>) {
-  //   return this.userRepository.find(query);
-    // return this.userRepository.find({ where: [{ username: query}, { email: query} ] });
-  // }
-
-  // removeOne(query: FindOptionsWhere<User>) {
-  //   return this.userRepository.delete(query);
-  // }
 }
