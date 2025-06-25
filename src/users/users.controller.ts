@@ -12,7 +12,6 @@ import {
 } from "@nestjs/swagger";
 import { User } from "./entities/user.entity";
 import { NoValidUserResponse } from "./dto/no-valid-user-response";
-import { FindUserDto } from "./dto/find-user.dto";
 import { AuthUser } from "../common/decorators/user.decorator";
 
 @ApiTags('users')
@@ -82,8 +81,7 @@ export class UsersController {
     type: [User],
   })
   @Post('find')
-  findByUsernameOrEmail(@Body() findUserDto: FindUserDto) {
-    const { email, username } = findUserDto;
-    return this.usersService.findMany({ where: [{ username }, { email }] });
+  findByUsernameOrEmail(@Body() queryObj: { query: string }) {
+    return this.usersService.findMany({ where: [{ username: queryObj.query }, { email: queryObj.query }] });
   }
 }
