@@ -14,11 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     async validate(jwtPayload: { sub: number }) {
-        const user = await this.usersService.findOne({
-            where: { id: jwtPayload.sub },
-            relations: { wishes: true, wishlists: true }
-        });
-        console.log(user);
+        const user = await this.usersService.findOne({ where: { id: jwtPayload.sub } });
 
         if (!user) {
             throw new UnauthorizedException('Такого пользователя не существует.');
