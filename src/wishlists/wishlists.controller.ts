@@ -8,11 +8,11 @@ import { User } from "../users/entities/user.entity";
 import { JwtGuard } from "../auth/guards/jwt.guard";
 import { Wishlist } from "./entities/wishlist.entity";
 
-@ApiTags('wishlists')
+@ApiTags('wishlistlists')
 @ApiBearerAuth()
 @ApiExtraModels(Wishlist)
 @UseGuards(JwtGuard)
-@Controller('wishlists')
+@Controller('wishlistlists')
 export class WishlistsController {
   constructor(private readonly wishlistsService: WishlistsService) {}
 
