@@ -31,7 +31,7 @@ export class WishlistsService {
   }
 
   async updateOne(userId: number, query: FindOptionsWhere<Wishlist>, updateWishlistDto: UpdateWishlistDto) {
-    const owner = await this.usersService.findOne({ where: { id: userId }});
+    const owner = await this.usersService.findOne({ where: { id: userId }, relations: { wishlists: true }});
     const sourceWishlist = await this.findOne({ where: { id: query.id } });
 
     const myWishlist = owner.wishlists.find(wishlist => wishlist.id === sourceWishlist.id);
@@ -43,7 +43,7 @@ export class WishlistsService {
   }
 
   async removeOne(userId: number, query: FindOptionsWhere<Wishlist>) {
-    const owner = await this.usersService.findOne({ where: { id: userId }});
+    const owner = await this.usersService.findOne({ where: { id: userId }, relations: { wishlists: true }});
     const sourceWishlist = await this.findOne({ where: { id: query.id } });
 
     const myWishlist = owner.wishlists.find(wishlist => wishlist.id === sourceWishlist.id);

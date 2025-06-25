@@ -58,7 +58,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Получить подарки пользователя' })
   @Get('me/wishes')
   async meWishes(@AuthUser() user: User) {
-    const me = await this.usersService.findOne({ where: { id: user.id }});
+    const me = await this.usersService.findOne({ where: { id: user.id }, relations: { wishes: true } });
     return me.wishes;
   }
 
@@ -71,7 +71,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Получить все подарки пользователя по username' })
   @Get(':username/wishes')
   async findWishesByUsername(@Param('username') username: string ) {
-    const user = await this.usersService.findOne({ where: { username } });
+    const user = await this.usersService.findOne({ where: { username }, relations: { wishes: true } });
     return user.wishes;
   }
 

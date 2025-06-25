@@ -46,10 +46,9 @@ export class WishesService {
   }
 
   async updateOne(userId: number, query: FindOptionsWhere<Wish>, updateWishDto: UpdateWishDto) {
-    const wish = await this.findOne({ where: { id: query.id } });
-    const owner = await this.usersService.findOne({ where: { id: userId }});
+    const wish = await this.findOne({ where: { id: query.id }, relations: { owner: true } });
 
-    if (wish.owner.id !== owner.id) {
+    if (wish.owner.id !== userId) {
       throw new ForbiddenException('Нельзя изменять чужие подарки');
     }
 
@@ -57,10 +56,9 @@ export class WishesService {
   }
 
   async removeOne(userId: number, query: FindOptionsWhere<Wish>) {
-    const wish = await this.findOne({ where: { id: query.id } });
-    const owner = await this.usersService.findOne({ where: { id: userId }});
+    const wish = await this.findOne({ where: { id: query.id }, relations: { owner: true } });
 
-    if (wish.owner.id !== owner.id) {
+    if (wish.owner.id !== userId) {
       throw new ForbiddenException('Нельзя удалять чужие подарки');
     }
 
@@ -68,7 +66,7 @@ export class WishesService {
   }
 
   async copy(userId: number, wishId: number) {
-    const owner = await this.usersService.findOne({ where: { id: userId }});
+    const owner = await this.usersService.findOne({ where: { id: userId }, relations: { wishes: true }});
     const sourceWish = await this.findOne({ where: { id: wishId }});
 
     const alreadyCopiedWish = owner.wishes.find(wish => wish.copiedWishId === sourceWish.id);
