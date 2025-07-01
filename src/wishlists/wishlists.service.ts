@@ -2,20 +2,23 @@ import { ConflictException, Injectable, NotFoundException } from "@nestjs/common
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 import {InjectRepository} from "@nestjs/typeorm";
-import { FindManyOptions, FindOneOptions, FindOptionsWhere, Repository } from "typeorm";
+import { FindManyOptions, FindOneOptions, FindOptionsWhere, In, Repository } from "typeorm";
 import { Wishlist } from "./entities/wishlist.entity";
 import { UsersService } from "../users/users.service";
+import { WishesService } from "../wishes/wishes.service";
 
 @Injectable()
 export class WishlistsService {
   constructor(
     @InjectRepository(Wishlist) private wishlistRepository: Repository<Wishlist>,
-    private readonly usersService: UsersService
+    private readonly usersService: UsersService,
+    private readonly wishesService: WishesService
     ) {}
 
   async create(userId: number, createWishlistDto: CreateWishlistDto) {
     const owner = await this.usersService.findOne({ where: { id: userId }});
-    return this.wishlistRepository.save({...createWishlistDto, owner });
+    const items = await this.wishesService.findMany({ where: { id: In(createWishlistDto.itemsId) } });
+    return this.wishlistRepository.save({...createWishlistDto, owner, items });
   }
 
   findMany(query?: FindManyOptions<Wishlist>) {
