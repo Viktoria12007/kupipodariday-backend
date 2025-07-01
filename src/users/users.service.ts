@@ -17,7 +17,7 @@ export class UsersService {
         ...createUserDto,
         password: await hashValue(password),
       });
-      return this.userRepository.save(user);
+      return await this.userRepository.save(user);
     } catch (err) {
       if (err instanceof QueryFailedError && err.driverError?.code === '23505') {
         throw new BadRequestException('Пользователь с таким username или e-mail уже существует');
@@ -45,7 +45,7 @@ export class UsersService {
       if (password) {
         updateUserDto.password = await hashValue(password);
       }
-      return this.userRepository.save({ ...user, ...updateUserDto });
+      return await this.userRepository.save({ ...user, ...updateUserDto });
     } catch (err) {
       if (err instanceof QueryFailedError && err.driverError?.code === '23505') {
         throw new BadRequestException('Новый username или e-mail уже занят');
