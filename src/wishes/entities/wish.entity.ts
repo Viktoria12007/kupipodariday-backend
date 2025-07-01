@@ -43,20 +43,30 @@ export class Wish {
     image: string;
 
     @ApiProperty({ description: 'стоимость подарка', example: 2000 })
-    @Column({
-        type: "money",
-    })
     @IsNumber({
         maxDecimalPlaces: 2,
+    })
+    @Column({
+        type: "decimal",
+        scale: 2,
+        transformer: {
+            to: (value: number) => value,
+            from: (value: string) => parseFloat(value),
+        },
     })
     price: number;
 
     @ApiProperty({ description: 'сумма предварительного сбора или сумма, которую пользователи сейчас готовы скинуть на подарок', example: 500 })
-    @Column({
-        type: "money",
-    })
     @IsNumber({
         maxDecimalPlaces: 2,
+    })
+    @Column({
+        type: "decimal",
+        scale: 2,
+        transformer: {
+            to: (value: number) => value,
+            from: (value: string) => parseFloat(value),
+        },
     })
     raised: number;
 

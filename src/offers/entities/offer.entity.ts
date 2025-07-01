@@ -23,7 +23,12 @@ export class Offer {
         maxDecimalPlaces: 2,
     })
     @Column({
-        type: "money",
+        type: "decimal",
+        scale: 2,
+        transformer: {
+            to: (value: number) => value,
+            from: (value: string) => parseFloat(value),
+        },
     })
     amount: number;
 
