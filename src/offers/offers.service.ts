@@ -17,7 +17,11 @@ export class OffersService {
   async create(userId: number, createOfferDto: CreateOfferDto) {
     const { amount, itemId } = createOfferDto;
     const user = await this.usersService.findOne({ where: { id: userId }});
-    const item = await this.wishesService.findOne({ where: { id: itemId }});
+    const item = await this.wishesService.findOne({ where: { id: itemId }, relations: { owner: true }});
+
+    if (userId === item.owner.id) {
+      throw new BadRequestException('Нельзя вносить деньги на собственные подарки');
+    }
 
     const raised = item.raised + amount;
     if (raised > item.price) {
