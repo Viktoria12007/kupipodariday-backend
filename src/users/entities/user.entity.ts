@@ -24,6 +24,7 @@ export class User {
     @Length(2, 30)
     @Column({
         unique: true,
+        length: 30
     })
     username: string;
 
@@ -32,7 +33,8 @@ export class User {
     @Length(2, 200)
     @IsOptional()
     @Column({
-        default: 'Пока ничего не рассказал о себе'
+        default: 'Пока ничего не рассказал о себе',
+        length: 200
     })
     about: string;
 
