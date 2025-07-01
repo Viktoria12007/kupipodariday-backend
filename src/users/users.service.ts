@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from "@nestjs/typeorm";
@@ -30,8 +30,8 @@ export class UsersService {
     return this.userRepository.find(query);
   }
 
-  findOne(query: FindOneOptions<User>) {
-    const user = this.userRepository.findOne(query);
+  async findOne(query: FindOneOptions<User>) {
+    const user = await this.userRepository.findOne(query);
     if (!user) {
       throw new NotFoundException('Такого пользователя не существует!');
     }
@@ -41,7 +41,7 @@ export class UsersService {
   async updateOne(query: FindOneOptions<User>, updateUserDto: UpdateUserDto) {
     try {
       const { password } = updateUserDto;
-      const user = this.findOne(query);
+      const user = await this.findOne(query);
       if (password) {
         updateUserDto.password = await hashValue(password);
       }

@@ -22,8 +22,8 @@ export class WishlistsService {
     return this.wishlistRepository.find(query);
   }
 
-  findOne(query: FindOneOptions<Wishlist>) {
-    const wishlist = this.wishlistRepository.findOne(query);
+  async findOne(query: FindOneOptions<Wishlist>) {
+    const wishlist = await this.wishlistRepository.findOne(query);
     if (!wishlist) {
       throw new NotFoundException('Такого списка подарков не существует!');
     }

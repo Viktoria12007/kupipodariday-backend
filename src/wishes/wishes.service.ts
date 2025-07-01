@@ -23,8 +23,8 @@ export class WishesService {
     return this.wishRepository.find(query);
   }
 
-  findOne(query: FindOneOptions<Wish>) {
-    const wish = this.wishRepository.findOne(query);
+  async findOne(query: FindOneOptions<Wish>) {
+    const wish = await this.wishRepository.findOne(query);
     if (!wish) {
       throw new NotFoundException('Такого подарка не существует!');
     }
@@ -80,9 +80,9 @@ export class WishesService {
     return this.create(owner.id, { ...wishData, copiedWishId: id });
   }
 
-  set(query: FindOptionsWhere<Wish>, raised: ChangedRaisedDto) {
+  async set(query: FindOptionsWhere<Wish>, raised: ChangedRaisedDto) {
     try {
-      return this.wishRepository.update(query, raised);
+      return await this.wishRepository.update(query, raised);
     } catch (err) {
       throw new NotFoundException('Такого подарка не существует');
     }

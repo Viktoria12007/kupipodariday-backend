@@ -38,8 +38,8 @@ export class OffersService {
     return this.offerRepository.find(query);
   }
 
-  findOne(query: FindOneOptions<Offer>) {
-    const offer = this.offerRepository.findOne(query);
+  async findOne(query: FindOneOptions<Offer>) {
+    const offer = await this.offerRepository.findOne(query);
     if (!offer) {
       throw new NotFoundException('Такого предложения скинуться не существует!');
     }
