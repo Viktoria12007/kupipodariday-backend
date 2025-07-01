@@ -39,7 +39,7 @@ export class WishesController {
   @UseGuards(JwtGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.wishesService.findOne({ where: { id: +id }});
+    return this.wishesService.findOne({ where: { id: +id }, relations: ['owner', 'offers']});
   }
 
   @ApiOperation({ summary: 'Редактировать подарок по id' })

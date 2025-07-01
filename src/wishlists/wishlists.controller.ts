@@ -25,13 +25,13 @@ export class WishlistsController {
   @ApiOperation({ summary: 'Найти все списки подарков' })
   @Get()
   findAll() {
-    return this.wishlistsService.findMany();
+    return this.wishlistsService.findMany({ relations: ['owner']});
   }
 
   @ApiOperation({ summary: 'Получить список подарков по id' })
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.wishlistsService.findOne({ where: { id: +id }});
+    return this.wishlistsService.findOne({ where: { id: +id }, relations: ['owner', 'items']});
   }
 
   @ApiOperation({ summary: 'Редактировать список подарков по id' })
