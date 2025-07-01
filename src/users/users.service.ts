@@ -20,7 +20,7 @@ export class UsersService {
       return this.userRepository.save(user);
     } catch (err) {
       if (err instanceof QueryFailedError && err.driverError?.code === '23505') {
-        throw new ConflictException('Пользователь с таким e-mail уже существует');
+        throw new BadRequestException('Пользователь с таким username или e-mail уже существует');
       }
       throw new BadRequestException('Переданы некорректные данные при создании пользователя');
     }
@@ -48,7 +48,7 @@ export class UsersService {
       return this.userRepository.save({ ...user, ...updateUserDto });
     } catch (err) {
       if (err instanceof QueryFailedError && err.driverError?.code === '23505') {
-        throw new ConflictException('Новый e-mail уже занят');
+        throw new BadRequestException('Новый username или e-mail уже занят');
       }
       throw new BadRequestException('Переданы некорректные данные при обновлении пользователя');
     }
